@@ -26,7 +26,7 @@ function displayIncidents(incident) {
 function getSystemIncidents() {
   return new Promise(function (resolve, reject) {
     $.ajax({
-      url: `http://api.wmata.com/Incidents.svc/json/Incidents`,
+      url: `https://api.wmata.com/Incidents.svc/json/Incidents`,
       headers: { api_key: config.apiKey },
       type: "GET",
       success: function (data) {
