@@ -1,0 +1,205 @@
+@font-face {
+  font-family: "dotMatrixFont";
+  src: url("./media/fonts/dotmatrix.TTF") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "modernFont";
+  src: url("./media/fonts/modern.ttf") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body,
+h1,
+h2,
+h3,
+p {
+  font-family: "Helvetica Neue";
+  font-weight: bold;
+  color: white;
+  font-size: 1em;
+}
+
+body {
+  margin: 0px;
+  height: 100vh;
+  background-color: rgb(48, 48, 48);
+}
+
+main {
+  margin: 0px;
+}
+
+.logo {
+  height: 15vh;
+  object-fit: contain;
+}
+
+.subdivision {
+  flex: 1;
+  margin-bottom: 0px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-vert {
+  display: flex;
+  flex-direction: column;
+}
+
+.pad {
+  flex: 1;
+}
+
+.debug {
+  border-color: red;
+  border-style: solid;
+}
+
+.wmata-arrival {
+  display: flex;
+  flex: 1;
+  font-size: 4.5em;
+  column-gap: 1em;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.wmata-line-indicator {
+  width: 10vh;
+  height: 10vh;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: center;
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+  color: black;
+}
+
+.blue {
+  background-color: #009cde;
+  color: black;
+}
+
+.yellow {
+  background-color: #ffd100;
+  color: black;
+}
+
+.green {
+  background-color: #00b140;
+  color: white;
+}
+
+.red {
+  background-color: #bf0d3e;
+  color: white;
+}
+
+.orange {
+  background-color: #ed8b00;
+  color: black;
+}
+
+.silver {
+  background-color: #919d9d;
+  color: black;
+}
+
+.white {
+  background-color: #ffffff;
+  color: black;
+}
+
+.board {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.wmata-dest-div {
+  flex: 1;
+}
+
+.wmata-line-div {
+  width: 1.5em;
+}
+
+.wmata-car-div {
+  width: 1em;
+}
+
+.wmata-time-div {
+  width: 2em;
+}
+
+.dot-matrix-header {
+  color: red !important;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.modern-header {
+  font-weight: bold;
+  background-color: rgb(145, 145, 145);
+  color: white;
+}
+
+.station-name {
+  font-size: 5em;
+  margin: 0px;
+}
+
+.dotMatrixText {
+  color: orange;
+  font-family: "dotMatrixFont", sans-serif;
+  font-weight: lighter;
+}
+
+.modernText {
+  font-family: "modernFont", sans-serif;
+  font-weight: normal;
+}
+
+.page-header {
+  justify-content: left;
+  align-items: center;
+  column-gap: 2.5em;
+}
+
+.colored-line-icon {
+  aspect-ratio: 1 !important;
+  border-radius: 50%;
+  justify-content: center;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.service-alerts {
+  background-color: yellow;
+  text-align: center;
+  font-size: 2em;
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: none;
+}
+
+.service-alerts * {
+  color: black;
+  margin: 0px;
+}
+
+#incident-display-box {
+  font-weight: lighter;
+}
