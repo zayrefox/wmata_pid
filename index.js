@@ -256,11 +256,8 @@ async function initiateProgram() {
     })
     .then((data) => (config = data));
 
-  await fetch("./apiKey.json")
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => (config.apiKey = data.apiKey));
+  const params = new URLSearchParams(document.location.search);
+  config.apiKey = params.get("apiKey");
 
   startWMATA();
   updateAlertsThread();
