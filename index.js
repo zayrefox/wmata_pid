@@ -257,7 +257,11 @@ async function initiateProgram() {
     .then((data) => (config = data));
 
   const params = new URLSearchParams(document.location.search);
-  config.apiKey = params.get("apiKey");
+
+  //Overwrite any parameters that are provided as URL arguments
+  for (let param of params) {
+    config[param[0]] = param[1];
+  }
 
   startWMATA();
   updateAlertsThread();
