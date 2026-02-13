@@ -36,6 +36,7 @@ main {
 .logo {
   height: 15vh;
   object-fit: contain;
+  padding: 20px;
 }
 
 .subdivision {

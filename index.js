@@ -278,6 +278,10 @@ async function initiateProgram() {
   //Set the maximum number of trains to display based on the config
   NUM_TRAINS_TO_DISPLAY = config.maxTrainsOnTableDefault;
 
+  if (config.metroLogoStyle === "new") {
+    $("#logo").attr("src", "./media/metro logo new.png");
+  }
+
   startWMATA();
   if (config.displayServiceAdvisories) {
     updateAlertsThread();
