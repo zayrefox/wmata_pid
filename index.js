@@ -1,5 +1,5 @@
 var config = {};
-var NUM_TRAINS_TO_DISPLAY = 5; //Defaults to showing 5 trains, but needs to be mutable for when service alerts are active.
+var NUM_TRAINS_TO_DISPLAY = undefined;
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -149,6 +149,20 @@ function lineBuilder(line, destination, cars, time) {
   return arrivalInstance;
 }
 
+//Check if the specified incident matches any lines of interest in the config
+function isIncidentRelevant(incident) {
+  console.log(incident);
+  var isRelevant = false;
+
+  config.serviceAdvisoryLines.forEach((line) => {
+    isRelevant =
+      isRelevant ||
+      incident.LinesAffected.toLowerCase().includes(`${line.toLowerCase()};`);
+  });
+
+  return isRelevant;
+}
+
 //This funciton will update the system incidents display as they
 //appear
 
@@ -157,28 +171,26 @@ async function updateAlertsThread() {
     const incidents = await getSystemIncidents();
     var relevantIncidents = [];
     incidents.Incidents.forEach((incident) => {
-      if (
-        //TODO: Make this NOT hard coded!
-        incident.LinesAffected.includes("OR;") ||
-        incident.LinesAffected.toLowerCase().includes("loring")
-      ) {
+      if (isIncidentRelevant(incident)) {
         relevantIncidents.push(incident);
       }
     });
 
+    console.log(relevantIncidents);
     if (relevantIncidents.length > 0) {
-      document.getElementsByClassName("service-alerts")[0].style.display =
-        "block";
       for (let index = 0; index < relevantIncidents.length; index++) {
-        NUM_TRAINS_TO_DISPLAY = 4;
-        document.getElementById("incident-display-box").innerText =
-          relevantIncidents[index].Description;
+        document.getElementsByClassName("service-alerts")[0].style.display =
+          "block";
+        NUM_TRAINS_TO_DISPLAY = config.maxTrainsOnTableAlert;
+        renderTimeTable();
+        $("#incident-display-box").text(relevantIncidents[index].Description);
         await sleep(config.alertDisplayLength);
         document.getElementsByClassName("service-alerts")[0].style.display =
           "none";
       }
 
-      NUM_TRAINS_TO_DISPLAY = 5;
+      NUM_TRAINS_TO_DISPLAY = config.maxTrainsOnTableDefault;
+      renderTimeTable();
     } else {
       await sleep(config.idleAlertPulse);
     }
@@ -191,6 +203,7 @@ async function startWMATA() {
     document.getElementById("page-header").style.display = "none";
   }
 
+  //Pulls the station name from the WMATA API according to the station code in the config
   $.ajax({
     url: `https://api.wmata.com/Rail.svc/json/jStations`,
     headers: { api_key: config.apiKey },
@@ -212,45 +225,40 @@ async function startWMATA() {
     }
   });
 
-  //Get the currently active incidents
-  var incidents;
-  getSystemIncidents().then((response) => {
-    incidents = filterIncidents(response);
-  });
-
   while (true) {
-    $.ajax({
-      url: `https://api.wmata.com/StationPrediction.svc/json/GetPrediction/${config.stationCode}`,
-      headers: { api_key: config.apiKey },
-      type: "GET",
-    })
-      .done(function (data) {
-        let container = document.createElement("div");
-
-        //Create the Arrival for Each Entry
-        container.appendChild(lineBuilder("LN", "DEST", "CAR", "MIN"));
-
-        for (
-          let x = 0;
-          x < Math.min(data.Trains.length, NUM_TRAINS_TO_DISPLAY);
-          x++
-        ) {
-          let train = data.Trains[x];
-          container.appendChild(
-            lineBuilder(train.Line, train.Destination, train.Car, train.Min)
-          );
-        }
-
-        document.getElementById("wmata-board").innerHTML = container.innerHTML;
-      })
-      .fail(function () {
-        console.error(
-          "Something went wrong. Double check your API key and make sure you're using a valid station code"
-        );
-      });
-
+    renderTimeTable();
     await sleep(config.apiQueryTimer);
   }
+}
+
+async function renderTimeTable() {
+  $.ajax({
+    url: `https://api.wmata.com/StationPrediction.svc/json/GetPrediction/${config.stationCode}`,
+    headers: { api_key: config.apiKey },
+    type: "GET",
+  })
+    .done(function (data) {
+      let container = document.createElement("div");
+
+      //Create the Arrival for Each Entry
+      container.appendChild(lineBuilder("LN", "DEST", "CAR", "MIN"));
+
+      for (
+        let x = 0;
+        x < Math.min(data.Trains.length, NUM_TRAINS_TO_DISPLAY);
+        x++
+      ) {
+        let train = data.Trains[x];
+        container.appendChild(
+          lineBuilder(train.Line, train.Destination, train.Car, train.Min)
+        );
+      }
+
+      document.getElementById("wmata-board").innerHTML = container.innerHTML;
+    })
+    .fail(function (error, status, message) {
+      document.body.innerText = `Something went wrong! ${message}`;
+    });
 }
 
 async function initiateProgram() {
@@ -267,8 +275,13 @@ async function initiateProgram() {
     config[param[0]] = param[1];
   }
 
+  //Set the maximum number of trains to display based on the config
+  NUM_TRAINS_TO_DISPLAY = config.maxTrainsOnTableDefault;
+
   startWMATA();
-  updateAlertsThread();
+  if (config.displayServiceAdvisories) {
+    updateAlertsThread();
+  }
 }
 
 initiateProgram();

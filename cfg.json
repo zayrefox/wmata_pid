@@ -7,5 +7,9 @@
   "fullScreenIncidents": "false",
   "apiQueryTimer": 30000,
   "alertDisplayLength": 45000,
-  "idleAlertPulse": 120000
+  "idleAlertPulse": 120000,
+  "maxTrainsOnTableDefault": 5,
+  "maxTrainsOnTableAlert": 4,
+  "displayServiceAdvisories": true,
+  "serviceAdvisoryLines": ["OR", "SV"]
 }

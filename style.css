@@ -1,6 +1,6 @@
 @font-face {
   font-family: "dotMatrixFont";
-  src: url("./media/fonts/dotmatrix.TTF") format("woff2");
+  src: url("./media/fonts/wmata-metro-eta.otf") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
@@ -64,11 +64,12 @@ main {
 .wmata-arrival {
   display: flex;
   flex: 1;
-  font-size: 4.5em;
+  font-size: 3.75em;
   column-gap: 1em;
   align-items: center;
   padding-left: 10px;
   padding-right: 10px;
+  padding-bottom: 20px;
 }
 
 .wmata-line-indicator {
@@ -133,11 +134,11 @@ main {
 }
 
 .wmata-car-div {
-  width: 1em;
+  width: 2em;
 }
 
 .wmata-time-div {
-  width: 2em;
+  width: 2.5em;
 }
 
 .dot-matrix-header {
@@ -184,7 +185,7 @@ main {
 }
 
 .service-alerts {
-  background-color: yellow;
+  background-color: gray;
   text-align: center;
   font-size: 2em;
   position: absolute;
