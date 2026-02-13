@@ -174,7 +174,8 @@ async function updateAlertsThread() {
         document.getElementById("incident-display-box").innerText =
           relevantIncidents[index].Description;
         await sleep(config.alertDisplayLength);
-        document.getElementById("incident-display-box").innerText = "";
+        document.getElementsByClassName("service-alerts")[0].style.display =
+          "none";
       }
 
       NUM_TRAINS_TO_DISPLAY = 5;
