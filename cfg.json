@@ -2,7 +2,7 @@
   "layout": "dotMatrix",
   "stationCode": "K07",
   "showCar": "true",
-  "showHeader": "true",
+  "showHeader": "false",
   "legacyLineIndicators": "true",
   "fullScreenIncidents": "false",
   "apiQueryTimer": 30000,
@@ -12,5 +12,5 @@
   "maxTrainsOnTableAlert": 4,
   "displayServiceAdvisories": true,
   "serviceAdvisoryLines": ["OR", "SV"],
-  "metroLogoStyle": "new"
+  "metroLogoStyle": "old"
 }

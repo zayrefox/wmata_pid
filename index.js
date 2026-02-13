@@ -151,7 +151,6 @@ function lineBuilder(line, destination, cars, time) {
 
 //Check if the specified incident matches any lines of interest in the config
 function isIncidentRelevant(incident) {
-  console.log(incident);
   var isRelevant = false;
 
   config.serviceAdvisoryLines.forEach((line) => {
@@ -176,7 +175,6 @@ async function updateAlertsThread() {
       }
     });
 
-    console.log(relevantIncidents);
     if (relevantIncidents.length > 0) {
       for (let index = 0; index < relevantIncidents.length; index++) {
         document.getElementsByClassName("service-alerts")[0].style.display =
