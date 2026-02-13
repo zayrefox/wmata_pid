@@ -171,7 +171,7 @@ async function updateAlertsThread() {
         document.getElementById("incident-display-box").innerText =
           relevantIncidents[index].Description;
         await sleep(config.alertDisplayLength);
-        console.log("Completed Sleep Timer");
+        document.getElementById("incident-display-box").innerText = "";
       }
 
       NUM_TRAINS_TO_DISPLAY = 5;
