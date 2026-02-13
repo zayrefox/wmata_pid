@@ -123,6 +123,11 @@ function lineBuilder(line, destination, cars, time) {
 
   destDiv.innerText = cleanDestinationtext(destination);
   carDiv.innerText = cars;
+
+  if (carDiv.innerText === "8") {
+    carDiv.style.color = "limegreen";
+  }
+
   timeDiv.innerText = time;
 
   arrivalInstance.appendChild(lineDiv);
@@ -160,8 +165,6 @@ async function updateAlertsThread() {
         relevantIncidents.push(incident);
       }
     });
-
-    console.log(relevantIncidents);
 
     if (relevantIncidents.length > 0) {
       document.getElementsByClassName("service-alerts")[0].style.display =
