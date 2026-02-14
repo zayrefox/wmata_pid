@@ -83,6 +83,13 @@ function lineBuilder(line, destination, cars, time) {
   carDiv.classList.add("wmata-car-div");
   timeDiv.classList.add("wmata-time-div");
 
+  if (config.overrideBoardFontSize) {
+    lineDiv.style.fontSize = `${config.overrideBoardFontSize}em`;
+    destDiv.style.fontSize = `${config.overrideBoardFontSize}em`;
+    carDiv.style.fontSize = `${config.overrideBoardFontSize}em`;
+    timeDiv.style.fontSize = `${config.overrideBoardFontSize}em`;
+  }
+
   //Change to colored line indicators on modern themes
   if (config.layout === "modern") {
     lineDiv.classList.add("colored-line-icon");
@@ -115,7 +122,7 @@ function lineBuilder(line, destination, cars, time) {
     }
   }
 
-  if (config.legacyLineIndicators !== "true" && line !== "LN") {
+  if (!config.legacyLineIndicators && line !== "LN") {
     lineDiv.innerText = line[0];
   } else {
     lineDiv.innerText = line;
@@ -132,7 +139,7 @@ function lineBuilder(line, destination, cars, time) {
 
   arrivalInstance.appendChild(lineDiv);
 
-  if (config.showCar === "true") {
+  if (config.showCar) {
     arrivalInstance.appendChild(carDiv);
   }
 
@@ -197,8 +204,13 @@ async function updateAlertsThread() {
 
 async function startWMATA() {
   //(Optional) Hide the header at the top of the page
-  if (config.showHeader === "false") {
-    document.getElementById("page-header").style.display = "none";
+  if (!config.showHeader) {
+    $("#page-header").css("display", "none");
+  }
+
+  if (config.overrideHeaderFontSize) {
+    $("#station-name").css("font-size", `${config.overrideHeaderFontSize}em`);
+    $("#logo").css("height", `${config.overrideHeaderFontSize}em`);
   }
 
   //Pulls the station name from the WMATA API according to the station code in the config
@@ -251,7 +263,6 @@ async function renderTimeTable() {
           lineBuilder(train.Line, train.Destination, train.Car, train.Min)
         );
       }
-
       document.getElementById("wmata-board").innerHTML = container.innerHTML;
     })
     .fail(function (error, status, message) {
