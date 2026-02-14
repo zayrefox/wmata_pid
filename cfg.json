@@ -13,7 +13,7 @@
   "maxTrainsOnTableDefault": 5,
   "maxTrainsOnTableAlert": 4,
   "displayServiceAdvisories": true,
-  "serviceAdvisoryLines": ["OR"],
+  "serviceAdvisoryLines": ["RD", "OR", "YL", "GR", "BL", "SV"],
   "metroLogoStyle": "old",
   "overrideHeaderFontSize": 5,
   "overrideBoardFontSize": 1,
