@@ -1,3 +1,6 @@
+//Proudly made WITHOUT GenAI assistance
+//by Zayre Fox - BlueSky: @orca.fish
+
 var config = {};
 var NUM_TRAINS_TO_DISPLAY = undefined;
 
@@ -168,7 +171,6 @@ function isIncidentRelevant(incident) {
 
   return isRelevant;
 }
-
 //This funciton will update the system incidents display as they
 //appear
 
@@ -182,22 +184,72 @@ async function updateAlertsThread() {
       }
     });
 
-    if (relevantIncidents.length > 0) {
-      for (let index = 0; index < relevantIncidents.length; index++) {
-        document.getElementsByClassName("service-alerts")[0].style.display =
-          "block";
-        NUM_TRAINS_TO_DISPLAY = config.maxTrainsOnTableAlert;
-        renderTimeTable();
-        $("#incident-display-box").text(relevantIncidents[index].Description);
-        await sleep(config.alertDisplayLength);
-        document.getElementsByClassName("service-alerts")[0].style.display =
-          "none";
+    if (config.fullScreenIncidents) {
+      //Set custom font size override if necessary
+      if (config.overrideFullScreenAlertFontSize) {
+        $("#full-screen-service-advisory").css(
+          "font-size",
+          `${config.overrideFullScreenAlertFontSize}em`
+        );
       }
 
-      NUM_TRAINS_TO_DISPLAY = config.maxTrainsOnTableDefault;
-      renderTimeTable();
-    } else {
+      //Display the alert using the full screen method
+      for (let index = 0; index < relevantIncidents.length; index++) {
+        $("#full-screen-service-advisory").html("SERVICE<br>ADVISORY");
+        $("#fs-alert-container").css("visibility", "visible");
+        await sleep(5000);
+        $("#fs-alert-container").css("visibility", "hidden");
+
+        //Only display the portion of the message that actually fits on screen. Dynamically done so it can support any size display
+        const messageTokens = relevantIncidents[index].Description.replaceAll(
+          "â€™", //WMATA API is sending bad Unicode for apostrophes
+          "'"
+        ).split(" ");
+        let messageStartingIndex = 0;
+        for (let x = 0; x <= messageTokens.length; x++) {
+          $("#full-screen-service-advisory").text(
+            messageTokens.slice(messageStartingIndex, x).join(" ")
+          );
+          //Oops we went too far
+          if (
+            $("#full-screen-service-advisory").outerHeight() >
+            $("#fs-alert-container").outerHeight()
+          ) {
+            $("#full-screen-service-advisory").text(
+              messageTokens.slice(messageStartingIndex, x - 1).join(" ")
+            );
+            $("#fs-alert-container").css("visibility", "visible");
+            messageStartingIndex = x;
+            await sleep(config.fullScreenAlertPagingDelay);
+            $("#fs-alert-container").css("visibility", "hidden");
+          }
+        }
+        $("#fs-alert-container").css("visibility", "visible");
+        await sleep(config.fullScreenAlertPagingDelay);
+        $("#fs-alert-container").css("visibility", "hidden");
+        await sleep(config.fullScreenAlertCycleDelay);
+      }
+      $("#fs-alert-container").css("visibility", "hidden");
       await sleep(config.idleAlertPulse);
+    } else {
+      // Display the alert on the bottom of the screen
+      if (relevantIncidents.length > 0) {
+        for (let index = 0; index < relevantIncidents.length; index++) {
+          document.getElementsByClassName("service-alerts")[0].style.display =
+            "block";
+          NUM_TRAINS_TO_DISPLAY = config.maxTrainsOnTableAlert;
+          renderTimeTable();
+          $("#incident-display-box").text(relevantIncidents[index].Description);
+          await sleep(config.alertDisplayLength);
+          document.getElementsByClassName("service-alerts")[0].style.display =
+            "none";
+        }
+
+        NUM_TRAINS_TO_DISPLAY = config.maxTrainsOnTableDefault;
+        renderTimeTable();
+      } else {
+        await sleep(config.idleAlertPulse);
+      }
     }
   }
 }

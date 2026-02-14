@@ -4,15 +4,18 @@
   "showCar": true,
   "showHeader": false,
   "legacyLineIndicators": true,
-  "fullScreenIncidents": false,
+  "fullScreenIncidents": true,
   "apiQueryTimer": 30000,
   "alertDisplayLength": 45000,
   "idleAlertPulse": 120000,
+  "fullScreenAlertPagingDelay": 10000,
+  "fullScreenAlertCycleDelay": 60000,
   "maxTrainsOnTableDefault": 5,
   "maxTrainsOnTableAlert": 4,
   "displayServiceAdvisories": true,
-  "serviceAdvisoryLines": ["OR", "SV"],
+  "serviceAdvisoryLines": ["OR"],
   "metroLogoStyle": "old",
   "overrideHeaderFontSize": 5,
-  "overrideBoardFontSize": 1
+  "overrideBoardFontSize": 1,
+  "overrideFullScreenAlertFontSize": 5
 }
